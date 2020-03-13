@@ -1,4 +1,4 @@
-package xyz.hanliu.domain;
+package xyz.hanliu.iparking.domain;
 
 /**
  * @author HanLiu

@@ -1,4 +1,4 @@
-package xyz.hanliu.util;
+package xyz.hanliu.iparking.util;
 
 /**
  * @author HanLiu
