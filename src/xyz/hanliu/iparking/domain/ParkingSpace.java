@@ -10,10 +10,18 @@ import java.util.Date;
  * @create 2020-03-10-16:03
  * @blogip 47.110.70.206
  */
+
+/*
+ * 空闲车位实体类
+ */
 public class ParkingSpace {
     private int id;
     private String area;
     private String positionDetail;
+
+    /*
+     * FastJSON的注解，方便Date类型转JSON字符串出错
+     */
     @JSONField(format = "yyyy-MM-dd HH:mm")
     private Date startTime;
     @JSONField(format = "yyyy-MM-dd HH:mm")

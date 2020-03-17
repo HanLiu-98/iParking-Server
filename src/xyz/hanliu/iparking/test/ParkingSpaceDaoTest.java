@@ -15,6 +15,10 @@ import java.util.List;
  * @create 2020-03-11-18:31
  * @blogip 47.110.70.206
  */
+
+/*
+ * ParkingSpace数据库访问测试类
+ */
 public class ParkingSpaceDaoTest {
 
 

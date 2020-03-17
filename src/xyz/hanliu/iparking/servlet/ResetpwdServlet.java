@@ -20,10 +20,13 @@ import java.util.Map;
  */
 
 /*
- *处理客户端发来的Get请求
+ *处理客户端发来的重置密码用户请求(updaate)
  */
 @WebServlet("/ResetpwdServlet")
 public class ResetpwdServlet extends javax.servlet.http.HttpServlet {
+    /*
+     *处理客户端发来的Post请求
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //1.设置编码
@@ -41,7 +44,7 @@ public class ResetpwdServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
 
-        //调用UserDao的login方法，进行数据库操作，返回查询到的User
+        //调用UserDao的resetpwd方法，进行数据库操作，对user表进行更新操作，返回成功操作的条数
         UserDao dao = new UserDao();
         int result = dao.resetpwd(resetpwdUser);
 
@@ -52,6 +55,7 @@ public class ResetpwdServlet extends javax.servlet.http.HttpServlet {
         } else {
             responseMessage = "failure";
         }
+
         //设置返回数据格式和编码
         response.setContentType("application/json;charset=utf-8");
         //获取响应的输出流，将响应的字符串写出

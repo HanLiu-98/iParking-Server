@@ -6,12 +6,18 @@ package xyz.hanliu.iparking.domain;
  * @blogip 47.110.70.206
  */
 
+/*
+ * 平台用户实体类
+ */
 public class User {
     private String mobile;
     private String nickname;
     private String fullname;
     private String password;
 
+    /*
+     * getter方法
+     */
     public String getMobile() {
         return mobile;
     }
@@ -28,6 +34,9 @@ public class User {
         return password;
     }
 
+    /*
+     * setter方法
+     */
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
@@ -44,6 +53,9 @@ public class User {
         this.password = password;
     }
 
+    /*
+     *toString方法
+     */
     @Override
     public String toString() {
         return "User{" +

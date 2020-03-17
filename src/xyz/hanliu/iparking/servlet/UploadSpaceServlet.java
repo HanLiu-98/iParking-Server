@@ -26,40 +26,49 @@ import java.util.UUID;
  * @create 2020-03-09-13:50
  * @blogip 47.110.70.206
  */
+
+/*
+ *处理客户端发来的发布车位请求(insert)
+ */
 @WebServlet("/UploadSpaceServlet")
 public class UploadSpaceServlet extends HttpServlet {
+    /*
+     *处理客户端发来的Post请求
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ParkingSpace space = new ParkingSpace();
 
-
-        /*用户上传的图片保存到虚拟目录里*/
-        /*只在数据库里存储图片名*/
+        //用户上传的图片保存到虚拟目录里,只在数据库里存储图片名，需要访问图片可以通过URL
         String savePath = "E:/Graduation/IdeaProjects/image";
-        File file = new File(savePath);
 
-        /*使用Apache文件上传组件处理文件的上传*/
 
-        /*1、创建一个DiskFileItemFactory工厂*/
+        /*--------使用Apache文件上传组件(fileupload)处理多类型文件的上传--------*/
+
+        //1、创建一个DiskFileItemFactory工厂
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        /*2、创建一个文件上传解析器*/
+
+        //2、创建一个文件上传解析器
         ServletFileUpload upload = new ServletFileUpload(factory);
-        /*解决上传文件名的中文乱码*/
+
+        //解决上传文件名的中文乱码
         upload.setHeaderEncoding("UTF-8");
-        /*利用解析器解析请求*/
+
+        //3、利用解析器解析请求，返回FileItem类型的List
         List<FileItem> list = null;
         try {
             list = upload.parseRequest(request);
         } catch (FileUploadException e) {
             e.printStackTrace();
         }
-        /*逐个取出请求里的数据*/
+
+        //4、逐个取出FileItem类型的List里的数据
         for (FileItem item : list) {
-            /*如果fileitem中封装的是普通输入项的数据*/
+            //如果FileItem中存放的是普通输入项的数据
             if (item.isFormField()) {
+                //取出字段名和对应的值
                 String name = item.getFieldName();
                 String value = item.getString("UTF-8");
-
                 switch (name) {
                     case "area":
                         space.setArea(value);
@@ -68,6 +77,7 @@ public class UploadSpaceServlet extends HttpServlet {
                         space.setPositionDetail(value);
                         break;
                     case "startTime":
+                        //Date类型是以字符串形式提交的，需要进行解析
                         try {
                             space.setStartTime(Dateutils.strToDate(value));
                         } catch (ParseException e) {
@@ -95,21 +105,14 @@ public class UploadSpaceServlet extends HttpServlet {
                         break;
                     default:
                         System.out.println("如果我被执行，就是出错了！");
-
                 }
-
-                System.out.println(name + "=" + value);
-            } else    /*如果fileitem中封装的是上传文件*/ {
-
+            }
+            //如果FileItem中存放的文件，需要用输入流去读取
+            else {
+                //上传图片的文件名，已经在客户端指定了（userid+时间戳）
                 String filename = item.getName();
                 space.setImagePath(filename);
-                System.out.println(filename);
-//                if (filename == null || filename.trim().equals("")) {
-//                    continue;
-//                }
-//                //注意：不同的浏览器提交的文件名是不一样的，有些浏览器提交上来的文件名是带有路径的，如：  c:\a\b\1.txt，而有些只是单纯的文件名，如：1.txt
-//                //处理获取到的上传文件的文件名的路径部分，只保留文件名部分
-//                filename = filename.substring(filename.lastIndexOf("\\") + 1);
+
                 //获取item中的上传文件的输入流
                 InputStream in = item.getInputStream();
                 //创建一个文件输出流
@@ -129,11 +132,12 @@ public class UploadSpaceServlet extends HttpServlet {
                 out.close();
                 //删除处理文件上传时生成的临时文件
                 item.delete();
-
             }
         }
 
+        /*--------用户请求参数获取完毕，已经成功封装成ParkingSpace对象--------*/
 
+        //对数据库进行insert操作，添加空闲车位，返回成功操作的条数
         ParkingSpaceDao dao = new ParkingSpaceDao();
         int result = dao.addSpace(space);
         System.out.println(result);
@@ -141,11 +145,13 @@ public class UploadSpaceServlet extends HttpServlet {
         //把结果写回客户端
         String responseMessage;
         if (result == 1) {
+            //如果成功插入，除了返回success，还会传回空闲车位的id，方便查看详情
             int id = dao.findForId(space);
             responseMessage = "success" + "###" + String.valueOf(id);
         } else {
             responseMessage = "failure";
         }
+
         //设置返回数据格式和编码
         response.setContentType("application/json;charset=utf-8");
         //获取响应的输出流，将响应的字符串写出
@@ -153,11 +159,11 @@ public class UploadSpaceServlet extends HttpServlet {
         out.print(responseMessage);
         out.flush();
         out.close();
-
-
     }
 
-
+    /*
+     *处理客户端发来的Get请求
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         this.doPost(request, response);

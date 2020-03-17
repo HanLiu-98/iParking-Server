@@ -21,16 +21,14 @@ public class UserDao {
     private JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
 
     /**
-     * 登录方法
-     *
+     * 登录方法(select 参数mobile password)
      * @param loginUser 只有手机号和密码
      * @return user包含用户全部数据, 没有查询到，返回null
      */
     public User login(User loginUser) {
         try {
-            //1.编写sql
             String sql = "select * from user where mobile = ? and password = ?";
-            //2.调用query方法
+            //调用queryForObject方法，将查询结果直接封装成Object
             User user = template.queryForObject(sql,
                     new BeanPropertyRowMapper<User>(User.class),
                     loginUser.getMobile(), loginUser.getPassword());
@@ -41,10 +39,8 @@ public class UserDao {
         }
     }
 
-
     /**
-     * 注册方法
-     *
+     * 注册方法(insert)
      * @param registerUser 包含用户全部数据
      * @return count 在数据库中成功操作数据的条数
      */
@@ -62,9 +58,8 @@ public class UserDao {
     }
 
     /**
-     * 重置密码方法
-     *
-     * @param resetpwdUser 包含用户手机号、
+     * 重置密码方法(update)
+     * @param resetpwdUser 包含用户手机号、真实姓名
      * @return count 在数据库中成功操作数据的条数
      */
     public int resetpwd(User resetpwdUser) {

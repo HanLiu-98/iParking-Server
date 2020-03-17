@@ -20,7 +20,7 @@ import java.util.Map;
  */
 
 /*
- *处理客户端发来的Get请求
+ *处理客户端发来的注册用户请求(insert)
  */
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends javax.servlet.http.HttpServlet {
@@ -40,7 +40,7 @@ public class RegisterServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
 
-        //调用UserDao的login方法，进行数据库操作，返回查询到的User
+        //调用UserDao的register方法，进行数据库操作，对user表进行插入操作，返回成功操作的条数
         UserDao dao = new UserDao();
         int result = dao.register(registerUser);
 
@@ -51,6 +51,7 @@ public class RegisterServlet extends javax.servlet.http.HttpServlet {
         } else {
             responseMessage = "failure";
         }
+
         //设置返回数据格式和编码
         response.setContentType("application/json;charset=utf-8");
         //获取响应的输出流，将响应的字符串写出

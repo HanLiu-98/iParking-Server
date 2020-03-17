@@ -9,9 +9,14 @@ import java.util.Date;
  * @create 2020-03-10-16:21
  * @blogip 47.110.70.206
  */
+
+
 public class Dateutils {
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+    /*
+     * string转换成Date类型
+     */
     public static Date strToDate(String str) throws ParseException {
         Date date = format.parse(str);
         return date;

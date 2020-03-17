@@ -22,11 +22,14 @@ import java.util.Map;
  */
 
 /*
- *处理客户端发来的Get请求
+ *处理客户端发来的登录请求(select)
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends javax.servlet.http.HttpServlet
 {
+    /*
+     *处理客户端发来的Post请求
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //1.设置编码
@@ -34,7 +37,6 @@ public class LoginServlet extends javax.servlet.http.HttpServlet
 
         //获取请求参数，并且使用BeanUtils封装成User对象
         Map<String, String[]> map = request.getParameterMap();
-
         User loginUser = new User();
         try {
             BeanUtils.populate(loginUser, map);
@@ -47,6 +49,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet
         //调用UserDao的login方法，进行数据库操作，返回查询到的User
         UserDao dao = new UserDao();
         User user = dao.login(loginUser);
+
 
         //把查询到的User转换成JSON字符串
         Gson gson=new Gson();

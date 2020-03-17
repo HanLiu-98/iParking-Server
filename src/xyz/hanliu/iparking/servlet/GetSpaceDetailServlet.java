@@ -18,25 +18,26 @@ import java.io.PrintWriter;
  * @create 2020-03-11-21:00
  * @blogip 47.110.70.206
  */
+
+/*
+ *处理客户端发来的“获取某个车位的详细信息”的请求(select 条件spaceid)
+ */
 @WebServlet("/GetSpaceDetailServlet")
 public class GetSpaceDetailServlet extends HttpServlet {
+    /*
+     * 处理客户端发来的Post请求
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        //获取id参数，并且进行查询，返回查到的ParkingSpace对象
         int id = Integer.valueOf(request.getParameter("id"));
-        System.out.println(id);
-
         ParkingSpaceDao dao = new ParkingSpaceDao();
         ParkingSpace space = dao.findById(id);
-        System.out.println(space.toString());
 
 
-        //把查询到的User转换成JSON字符串
-
+        //把查询到的ParkingSpace对象转换成JSON字符串
         String responseMessage = JSON.toJSONString(space);
-//        Gson gson=new Gson();
-//        String responseMessage=gson.toJson(space);
-        System.out.println(responseMessage);
 
         //设置返回数据格式和编码
         response.setContentType("application/json;charset=utf-8");
@@ -45,12 +46,14 @@ public class GetSpaceDetailServlet extends HttpServlet {
         out.print(responseMessage);
         out.flush();
         out.close();
-
-
     }
 
+    /*
+     * 处理客户端发来的Get请求
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        this.doPost(request, response);
 
     }
 }

@@ -9,9 +9,16 @@ import java.util.Date;
  * @create 2020-03-12-18:18
  * @blogip 47.110.70.206
  */
+
+/*
+ * 空闲车位大致信息实体类-----方便在列表中展示
+ */
 public class ParkingSpace_General {
     private int id;
     private String positionDetail;
+    /*
+     * FastJSON的注解，方便Date类型转JSON字符串出错
+     */
     @JSONField(format = "yyyy-MM-dd HH:mm")
     private Date startTime;
     @JSONField(format = "yyyy-MM-dd HH:mm")
@@ -75,10 +82,10 @@ public class ParkingSpace_General {
         this.imagePath = imagePath;
     }
 
+
     /*
      *toString方法
      */
-
     @Override
     public String toString() {
         return "ParkingSpace_General{" +
